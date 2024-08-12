@@ -1,0 +1,19 @@
+neo4j:
+  name: ${var.module_prefix}
+  resources:
+    cpu: "0.5"
+    memory: "2Gi"
+
+  # Uncomment to set the initial password
+  password: ${var.neo4j_root_user_password}
+
+  # Uncomment to use enterprise edition
+  # edition: "enterprise"
+  # acceptLicenseAgreement: "yes"
+
+volumes:
+  data:
+    mode: "dynamic"
+    dynamic:
+      # gp2 is a general-purpose SSD volume
+      storageClassName: gp2

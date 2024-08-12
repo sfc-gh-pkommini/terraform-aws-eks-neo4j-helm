@@ -1,0 +1,43 @@
+services:
+  neo4j:
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-type: "external"
+      service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+      service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+      service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: "${tags}"
+      service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+      service.beta.kubernetes.io/load-balancer-source-ranges: "${allowed_cidr_blocks}"
+      service.beta.kubernetes.io/aws-load-balancer-subnets: "${public_subnet_ids}"
+      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "${subdomain_cert_arn}"
+      # service.beta.kubernetes.io/aws-load-balancer-attributes: "${logs_annotation}"
+      external-dns.alpha.kubernetes.io/hostname: "${neo4j_dns_name}"
+
+    # ports to include in neo4j service
+    ports:
+      https:
+        enabled: true # Set this to false to remove HTTPS from this service (this does not affect whether https is enabled for the neo4j process)
+        # uncomment to publish http on port 443 (neo4j default is 7473)
+        port: "443"
+        targetPort: "7474"
+        name: https
+
+
+neo4j:
+  name: ${module_prefix}
+  resources:
+    cpu: "0.5"
+    memory: "2Gi"
+
+  # Uncomment to set the initial password
+  password: ${neo4j_root_user_password}
+
+  # Uncomment to use enterprise edition
+  # edition: "enterprise"
+  # acceptLicenseAgreement: "yes"
+
+volumes:
+  data:
+    mode: "dynamic"
+    dynamic:
+     # gp2 is a general-purpose SSD volume
+     storageClassName: gp2

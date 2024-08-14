@@ -27,8 +27,6 @@ resource "helm_release" "neo4j" {
 
         neo4j_dns_name          = "${local.neo4j_dns_name}",
         subdomain_cert_arn      = "${var.subdomain_cert_arn}",
-        allowed_cidr_blocks_str = "${join(",", var.allowed_cidr_blocks)}",
-        public_subnet_ids_str   = "${join(",", var.public_subnet_ids)}",
         tags                    = "environment=${var.env}",
 
         allowed_cidr_blocks  = "${join(",", var.allowed_cidr_blocks)}",

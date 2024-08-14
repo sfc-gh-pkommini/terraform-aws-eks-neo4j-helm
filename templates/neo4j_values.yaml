@@ -41,3 +41,6 @@ volumes:
     dynamic:
      # gp2 is a general-purpose SSD volume
      storageClassName: gp2
+
+config:
+  dbms.connector.bolt.address: 0.0.0.0:7687

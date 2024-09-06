@@ -52,7 +52,6 @@ locals {
   neo4j_private_ingress_sg_ids = length(var.allowed_security_group_ids) == 0 ? [] : [aws_security_group.neo4j_private_ingress_sg.0.id]
 }
 
-
 # Create a security group
 resource "aws_security_group" "security_group_to_allow_traffic_to_7687" {
   name        = "allow_traffic_to_7687"

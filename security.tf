@@ -71,15 +71,26 @@ resource "aws_security_group_rule" "ingress_port_7687" {
   description       = "Allow traffic on port 7687 from anywhere"
 }
 
-# Ingress rule: Allow traffic from 1.2.3.4 on all other ports
-resource "aws_security_group_rule" "ingress_specific_ip_all_ports" {
+# Ingress rule: Allow traffic from allowed_cidr_blocks on ports 0-7686 (below port 7687)
+resource "aws_security_group_rule" "ingress_specific_ip_below_7687" {
   type              = "ingress"
   from_port         = 0
+  to_port           = 7686
+  protocol          = "tcp"
+  cidr_blocks       = [for s in var.allowed_cidr_blocks : s]
+  security_group_id = aws_security_group.security_group_to_allow_traffic_to_7687.id
+  description       = "Allow traffic from allowed_cidr_blocks on ports 0-7686"
+}
+
+# Ingress rule: Allow traffic from allowed_cidr_blocks on ports 7688-65535 (above port 7687)
+resource "aws_security_group_rule" "ingress_specific_ip_above_7687" {
+  type              = "ingress"
+  from_port         = 7688
   to_port           = 65535
   protocol          = "tcp"
-  cidr_blocks       = [for s in var.allowed_cidr_blocks : s.cidr_block]
+  cidr_blocks       = [for s in var.allowed_cidr_blocks : s]
   security_group_id = aws_security_group.security_group_to_allow_traffic_to_7687.id
-  description       = "Allow traffic from allowed_cidr_blocks on all other ports"
+  description       = "Allow traffic from allowed_cidr_blocks on ports 7688-65535"
 }
 
 # Egress rule: Allow all outbound traffic

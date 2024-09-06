@@ -77,7 +77,7 @@ resource "aws_security_group_rule" "ingress_specific_ip_below_7687" {
   from_port         = 0
   to_port           = 7686
   protocol          = "tcp"
-  cidr_blocks       = [for s in var.allowed_cidr_blocks : s]
+  cidr_blocks       = [for s in var.adhoc_cidr_blocks : s]
   security_group_id = aws_security_group.security_group_to_allow_traffic_to_7687.id
   description       = "Allow traffic from allowed_cidr_blocks on ports 0-7686"
 }
@@ -88,7 +88,7 @@ resource "aws_security_group_rule" "ingress_specific_ip_above_7687" {
   from_port         = 7688
   to_port           = 65535
   protocol          = "tcp"
-  cidr_blocks       = [for s in var.allowed_cidr_blocks : s]
+  cidr_blocks       = [for s in var.adhoc_cidr_blocks : s]
   security_group_id = aws_security_group.security_group_to_allow_traffic_to_7687.id
   description       = "Allow traffic from allowed_cidr_blocks on ports 7688-65535"
 }

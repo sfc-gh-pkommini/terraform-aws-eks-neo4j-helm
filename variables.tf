@@ -62,6 +62,12 @@ variable "allowed_cidr_blocks" {
   default     = []
 }
 
+variable "adhoc_cidr_blocks" {
+  description = "Allowed adhoc CIDR blocks that can initiate connections to neo4j."
+  type        = list(string)
+  default     = []
+}
+
 variable "allowed_security_group_ids" {
   description = "Allowed SG IDs that can initiate connections to neo4j."
   type        = list(string)

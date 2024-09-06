@@ -53,28 +53,6 @@ locals {
 }
 
 
-resource "aws_security_group" "neo4j_ingress_sg" {
-  count = length(var.allowed_cidr_blocks) == 0 ? 0 : 1
-
-  name        = "${var.app_name}-ingress"
-  description = "Private ingress SG to apply to the neo4j app."
-  vpc_id      = var.vpc_id
-}
-
-
-resource "aws_security_group_rule" "neo4j_private_ingress_allow_to_neo4j_container" {
-  count = length(var.allowed_cidr_blocks) == 0 ? 0 : 1
-
-  type        = "ingress"
-  to_port     = 0
-  from_port   = 0
-  protocol    = "-1"
-  cidr_blocks = ["0.0.0.0/0"]
-
-  security_group_id = aws_security_group.neo4j_private_ingress_sg.0.id
-}
-
-
 # Create a security group
 resource "aws_security_group" "security_group_to_allow_traffic_to_7687" {
   name        = "allow_traffic_to_7687"

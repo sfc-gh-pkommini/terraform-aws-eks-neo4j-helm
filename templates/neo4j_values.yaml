@@ -24,6 +24,8 @@ services:
 
 neo4j:
   name: ${module_prefix}
+  acceptLicenseAgreement: "yes"
+  edition: enterprise
   resources:
     cpu: "0.5"
     memory: "2Gi"
@@ -37,10 +39,9 @@ neo4j:
 
 volumes:
   data:
-    mode: "dynamic"
-    dynamic:
-     # gp2 is a general-purpose SSD volume
-     storageClassName: gp2
-
+    mode: defaultStorageClass
+env:
+  NEO4J_PLUGINS: '["graph-data-science", "bloom"]'
 config:
   dbms.connector.bolt.address: 0.0.0.0:7687
+  dbms.security.procedures.unrestricted: "gds.*,apoc.*"

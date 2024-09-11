@@ -48,3 +48,4 @@ env:
 config:
   dbms.connector.bolt.address: 0.0.0.0:7687
   dbms.security.procedures.unrestricted: "gds.*,apoc.*"
+  dbms.security.procedures.allowlist: "gds.*"

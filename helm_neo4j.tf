@@ -35,7 +35,6 @@ resource "helm_release" "neo4j" {
         logs_annotation      = "${local.logs_annotation}",
         neo4j_dns_name       = "${local.neo4j_dns_name}",
         neo4j_admin_dns_name = "${local.neo4j_admin_dns_name}"
-        security_group_id    = aws_security_group.security_group_to_allow_traffic_to_7687.id
         # existing_secret_name        = "${kubernetes_secret_v1.neo4j_secrets.metadata[0].name}",
       }
     )

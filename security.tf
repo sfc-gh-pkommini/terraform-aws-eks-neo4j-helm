@@ -52,53 +52,53 @@ locals {
   neo4j_private_ingress_sg_ids = length(var.allowed_security_group_ids) == 0 ? [] : [aws_security_group.neo4j_private_ingress_sg.0.id]
 }
 
-# Create a security group
-resource "aws_security_group" "security_group_to_allow_traffic_to_7687" {
-  name        = "allow_traffic_to_7687"
-  description = "Security group with specific rules"
-  vpc_id      = var.vpc_id
-}
+# # Create a security group
+# resource "aws_security_group" "security_group_to_allow_traffic_to_7687" {
+#   name        = "allow_traffic_to_7687"
+#   description = "Security group with specific rules"
+#   vpc_id      = var.vpc_id
+# }
 
-# Ingress rule: Allow traffic from anywhere on port 7687
-resource "aws_security_group_rule" "ingress_port_7687" {
-  type              = "ingress"
-  from_port         = 7687
-  to_port           = 7687
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.security_group_to_allow_traffic_to_7687.id
-  description       = "Allow traffic on port 7687 from anywhere"
-}
+# # Ingress rule: Allow traffic from anywhere on port 7687
+# resource "aws_security_group_rule" "ingress_port_7687" {
+#   type              = "ingress"
+#   from_port         = 7687
+#   to_port           = 7687
+#   protocol          = "tcp"
+#   cidr_blocks       = ["0.0.0.0/0"]
+#   security_group_id = aws_security_group.security_group_to_allow_traffic_to_7687.id
+#   description       = "Allow traffic on port 7687 from anywhere"
+# }
 
-# Ingress rule: Allow traffic from allowed_cidr_blocks on ports 0-7686 (below port 7687)
-resource "aws_security_group_rule" "ingress_specific_ip_below_7687" {
-  type              = "ingress"
-  from_port         = 0
-  to_port           = 7686
-  protocol          = "tcp"
-  cidr_blocks       = [for s in var.adhoc_cidr_blocks : s]
-  security_group_id = aws_security_group.security_group_to_allow_traffic_to_7687.id
-  description       = "Allow traffic from allowed_cidr_blocks on ports 0-7686"
-}
+# # Ingress rule: Allow traffic from allowed_cidr_blocks on ports 0-7686 (below port 7687)
+# resource "aws_security_group_rule" "ingress_specific_ip_below_7687" {
+#   type              = "ingress"
+#   from_port         = 0
+#   to_port           = 7686
+#   protocol          = "tcp"
+#   cidr_blocks       = [for s in var.adhoc_cidr_blocks : s]
+#   security_group_id = aws_security_group.security_group_to_allow_traffic_to_7687.id
+#   description       = "Allow traffic from allowed_cidr_blocks on ports 0-7686"
+# }
 
-# Ingress rule: Allow traffic from allowed_cidr_blocks on ports 7688-65535 (above port 7687)
-resource "aws_security_group_rule" "ingress_specific_ip_above_7687" {
-  type              = "ingress"
-  from_port         = 7688
-  to_port           = 65535
-  protocol          = "tcp"
-  cidr_blocks       = [for s in var.adhoc_cidr_blocks : s]
-  security_group_id = aws_security_group.security_group_to_allow_traffic_to_7687.id
-  description       = "Allow traffic from allowed_cidr_blocks on ports 7688-65535"
-}
+# # Ingress rule: Allow traffic from allowed_cidr_blocks on ports 7688-65535 (above port 7687)
+# resource "aws_security_group_rule" "ingress_specific_ip_above_7687" {
+#   type              = "ingress"
+#   from_port         = 7688
+#   to_port           = 65535
+#   protocol          = "tcp"
+#   cidr_blocks       = [for s in var.adhoc_cidr_blocks : s]
+#   security_group_id = aws_security_group.security_group_to_allow_traffic_to_7687.id
+#   description       = "Allow traffic from allowed_cidr_blocks on ports 7688-65535"
+# }
 
-# Egress rule: Allow all outbound traffic
-resource "aws_security_group_rule" "egress_all" {
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"  # -1 means all protocols
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.security_group_to_allow_traffic_to_7687.id
-  description       = "Allow all outbound traffic"
-}
+# # Egress rule: Allow all outbound traffic
+# resource "aws_security_group_rule" "egress_all" {
+#   type              = "egress"
+#   from_port         = 0
+#   to_port           = 0
+#   protocol          = "-1"  # -1 means all protocols
+#   cidr_blocks       = ["0.0.0.0/0"]
+#   security_group_id = aws_security_group.security_group_to_allow_traffic_to_7687.id
+#   description       = "Allow all outbound traffic"
+# }

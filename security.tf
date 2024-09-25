@@ -111,7 +111,7 @@ resource "aws_security_group" "security_group_to_allow_outbound_traffic" {
 }
 
 # Egress rule: Allow all outbound traffic
-resource "aws_security_group_rule" "egress_all" {
+resource "aws_security_group_rule" "egress_all_allow_outbound_traffic_sg" {
   type              = "egress"
   from_port         = 0
   to_port           = 0

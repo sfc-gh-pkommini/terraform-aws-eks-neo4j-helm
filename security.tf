@@ -52,7 +52,7 @@ locals {
   neo4j_private_ingress_sg_ids = length(var.allowed_security_group_ids) == 0 ? [] : [aws_security_group.neo4j_private_ingress_sg.0.id]
 }
 
-# Create a security group
+# Create the load balancer security group
 resource "aws_security_group" "security_group_to_allow_traffic_to_7687" {
   name        = "allow_traffic_to_7687"
   description = "Security group with specific rules"
@@ -100,5 +100,23 @@ resource "aws_security_group_rule" "egress_all" {
   protocol          = "-1"  # -1 means all protocols
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.security_group_to_allow_traffic_to_7687.id
+  description       = "Allow all outbound traffic"
+}
+
+# Create another security group for load balancer (cluster level configs?? I don't know man ¯\_(ツ)_/¯)
+resource "aws_security_group" "security_group_to_allow_outbound_traffic" {
+  name        = "allow_outbound_traffic"
+  description = "Security group with specific rules"
+  vpc_id      = var.vpc_id
+}
+
+# Egress rule: Allow all outbound traffic
+resource "aws_security_group_rule" "egress_all" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"  # -1 means all protocols
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.security_group_to_allow_outbound_traffic.id
   description       = "Allow all outbound traffic"
 }

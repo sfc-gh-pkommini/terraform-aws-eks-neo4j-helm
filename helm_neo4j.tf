@@ -31,7 +31,7 @@ resource "helm_release" "neo4j" {
 
         allowed_cidr_blocks = "${join(",", var.allowed_cidr_blocks)}",
         security_group_ids = "${join(",", [
-          aws_security_group.allow_from_lb_to_eks_clusterf.id,
+          aws_security_group.allow_from_lb_to_eks_cluster.id,
           aws_security_group.security_group_to_allow_traffic_to_7687.id,
         ])}",
         public_subnet_ids = "${join(",", var.public_subnet_ids)}",

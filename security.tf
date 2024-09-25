@@ -103,7 +103,7 @@ resource "aws_security_group_rule" "egress_all" {
   description       = "Allow all outbound traffic"
 }
 
-# Create another security group for load balancer (cluster level configs?? I don't know)
+# Create another security group for load balancer (cluster level configs?? I don't know man ¯\_(ツ)_/¯)
 resource "aws_security_group" "security_group_to_allow_outbound_traffic" {
   name        = "allow_outbound_traffic"
   description = "Security group with specific rules"

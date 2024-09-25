@@ -112,10 +112,9 @@ variable "node_security_group_id" {
 variable "cluster_security_group_id" {
   description = "Node security group IDs."
   type        = string
-  default     = null
 }
 
 locals {
-  neo4j_dns_name = var.domain_name_suffix != null ? "${var.app_name}-${var.domain_name_suffix}.${var.hosted_zone_subdomain}" : "${var.app_name}.${var.hosted_zone_subdomain}"
+  neo4j_dns_name       = var.domain_name_suffix != null ? "${var.app_name}-${var.domain_name_suffix}.${var.hosted_zone_subdomain}" : "${var.app_name}.${var.hosted_zone_subdomain}"
   neo4j_admin_dns_name = var.domain_name_suffix != null ? "${var.app_name}-${var.domain_name_suffix}.${var.hosted_zone_subdomain}" : "${var.app_name}.${var.hosted_zone_subdomain}"
 }

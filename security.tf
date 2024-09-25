@@ -104,9 +104,9 @@ resource "aws_security_group_rule" "egress_all" {
 }
 
 # Create another security group for load balancer (cluster level configs?? I don't know man ¯\_(ツ)_/¯)
-resource "aws_security_group" "security_group_to_allow_outbound_traffic" {
-  name        = "allow_outbound_traffic"
-  description = "Security group with specific rules"
+resource "aws_security_group" "allow_from_lb_to_eks_cluster" {
+  name        = "allow_from_lb_to_eks_cluster"
+  description = "Group to allow traffic from ALB to EKS Cluster"
   vpc_id      = var.vpc_id
 }
 
@@ -117,6 +117,24 @@ resource "aws_security_group_rule" "egress_all_allow_outbound_traffic_sg" {
   to_port           = 0
   protocol          = "-1"  # -1 means all protocols
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.security_group_to_allow_outbound_traffic.id
+  security_group_id = aws_security_group.allow_from_lb_to_eks_cluster.id
   description       = "Allow all outbound traffic"
+}
+
+resource "aws_security_group_rule" "eks_node_sg_allow_from_lb" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  source_security_group_id = aws_security_group.allow_from_lb_to_eks_cluster.id
+  security_group_id        = var.node_security_group_id
+}
+
+resource "aws_security_group_rule" "eks_cluster_sg_allow_from_lb" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  source_security_group_id = aws_security_group.allow_from_lb_to_eks_cluster.id
+  security_group_id        = var.cluster_security_group_id
 }

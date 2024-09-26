@@ -6,7 +6,8 @@ services:
       service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
       service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: "${tags}"
       service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443, 7474, 7687"
-    #   service.beta.kubernetes.io/load-balancer-source-ranges: "${allowed_cidr_blocks}"
+      service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+      #   service.beta.kubernetes.io/load-balancer-source-ranges: "${allowed_cidr_blocks}"
       service.beta.kubernetes.io/aws-load-balancer-security-groups: "${security_group_ids}"
       service.beta.kubernetes.io/aws-load-balancer-subnets: "${public_subnet_ids}"
       service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "${subdomain_cert_arn}"
@@ -21,7 +22,6 @@ services:
         port: "443"
         targetPort: "7474"
         name: https
-
 
 neo4j:
   name: ${module_prefix}
@@ -42,8 +42,8 @@ volumes:
   data:
     mode: "dynamic"
     dynamic:
-     # gp2 is a general-purpose SSD volume
-     storageClassName: gp2
+      # gp2 is a general-purpose SSD volume
+      storageClassName: gp2
 env:
   NEO4J_PLUGINS: '["graph-data-science", "bloom"]'
 config:
